@@ -18,11 +18,10 @@ public class Main {
         String in;
         do {
             System.out.println("Please enter your aromatic number:");
-            in = input.nextLine();
+            in = input.nextLine().toUpperCase();
         }while(checkAromatic(in)==false);
         input.close();
         System.out.println("Decimal value of " + in + ": " + calcAromatic(in));
-
     }
 
 
@@ -41,34 +40,26 @@ public class Main {
 
     public static Integer calcAromatic(String q){
         int sum = 0;
-        for(int i=0;i<q.length()-1;i+=2){
-            sum += Integer.parseInt(String.valueOf(q.charAt(i)))*calcRoman(q.charAt(i+1));
+        for(int i=1;i<q.length()-2;i+=2){
+            if(calcRoman(q.charAt(i))<calcRoman(q.charAt(i+2))){
+                sum-=Integer.parseInt(String.valueOf(q.charAt(i-1)))*calcRoman(q.charAt(i));
+            }else{
+                sum+=Integer.parseInt(String.valueOf(q.charAt(i-1)))*calcRoman(q.charAt(i));
+            }
         }
+        sum+=Integer.parseInt(String.valueOf(q.charAt(q.length()-2)))*calcRoman(q.charAt(q.length()-1));
         return sum;
     }
 
     public static Integer calcRoman(char x){
-        if(x=='I'){
-            return 1;
-        }else
-            if(x=='V'){
-                return 5;
-                }else
-                if(x=='X'){
-                    return 10;
-                }else
-                    if(x=='L'){
-                        return 50;
-                    }else
-                        if(x=='C'){
-                            return 100;
-                        }else
-                            if(x=='D'){
-                                return 500;
-                            }else
-                                if(x=='M'){
-                                    return 1000;
-                                }
+        Integer[] numbers = {1,5,10,50,100,500,1000};
+        char[] romans = {'I','V','X','L','C','D','M'};
+        for(int i=0; i<romans.length; i++){
+            if(romans[i]==x){
+                return numbers[i];
+            }
+        }
         return 0;
     }
+
 }
